@@ -1,8 +1,7 @@
 using StarWar.Dtos;
 using StarWar.Dtos.Swapi;
-using StarWar.Service;
 
-namespace StarWar.Controllers.Service;
+namespace StarWar.Service;
 
 public class StarWarCharacterDataFetcher:IStarWarCharacterDataFetcher
 {
@@ -36,6 +35,10 @@ public class StarWarCharacterDataFetcher:IStarWarCharacterDataFetcher
             nextUrl = response?.Next;
         }
 
+        if (characterList.Count == 0)
+        {
+            return new StarWarCharacterDataResponse();
+        }
         
         var averageHeight = 
             RoundedToTwoDecimals(
@@ -43,13 +46,27 @@ public class StarWarCharacterDataFetcher:IStarWarCharacterDataFetcher
                 .Average(character => double.Parse(character.Height)));
         var averageWeight = RoundedToTwoDecimals(characterList
             .Average(character => double.Parse(character.Mass)));
+
+        var percentile95Height = CalculatePercentile(
+            characterList,
+            p => double.Parse(p.Height),
+            0.95
+        );
+        
+        var percentile95Weight = CalculatePercentile(
+            characterList,
+            p => double.Parse(p.Mass),
+            0.95
+        );
+        
+        
         
         return new StarWarCharacterDataResponse
         {
             AverageHeight = averageHeight,
             AverageWeight = averageWeight,
-            Percentile95Height = RoundedToTwoDecimals(averageHeight * 0.95),
-            Percentile95Weight = RoundedToTwoDecimals(averageWeight * 0.95),
+            Percentile95Height = percentile95Height,
+            Percentile95Weight = percentile95Weight,
         };
     }
 
@@ -57,4 +74,23 @@ public class StarWarCharacterDataFetcher:IStarWarCharacterDataFetcher
     {
         return Math.Round(input,2);
     }
+    
+    private static double CalculatePercentile(List<SwapiPerson>  persons, Func<SwapiPerson, double> selector  ,double percentile)
+    {
+        var values = persons
+            .Select(selector)
+            .OrderBy(p=>p)
+            .ToList();
+        
+        if (values.Count == 0)
+        {
+            return 0;
+        }
+        
+        int index = (int)Math.Ceiling(values.Count * percentile) - 1;
+
+        return values[index];
+
+    }
+    
 }

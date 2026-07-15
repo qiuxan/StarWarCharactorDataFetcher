@@ -21,17 +21,10 @@ public class CharactersController : Controller
         
         var response = await _dataFetcher.GetCharacterDataAsync(new StarWarCharacterDataRequest { Url = url } );
 
-        var averageHeight = response.AverageHeight;
-        var averageWeight = response.AverageWeight;
-        
-        var percentile95Height = response.Percentile95Height;
-        var percentile95Weight = response.Percentile95Weight;
-
-
-        return Ok($"Average Height: {averageHeight}" + " cm \n"+
-                  $"Average Weight:  {averageWeight}" +" kg \n"+
-                  $"95th Percentile Height: {percentile95Height}" + " cm \n"+
-                  $"95th Percentile Weight:{percentile95Weight}" + " kg \n"
+        return Ok($"Average Height: {response.AverageHeight}" + " cm \n"+
+                  $"Average Weight:  {response.AverageWeight}" +" kg \n"+
+                  $"95th Percentile Height: {response.Percentile95Height}" + " cm \n"+
+                  $"95th Percentile Weight:{response.Percentile95Weight}" + " kg \n"
                   );
     }
 }

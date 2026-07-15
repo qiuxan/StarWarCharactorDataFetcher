@@ -1,6 +1,8 @@
 namespace StarWar.Controllers.Dtos;
 
-public class StarWarCharacterDataResponse
+public record StarWarCharacterDataResponse
 {
+    public double AverageHeight { get; set; }
+    public double AverageWeight { get; set; }
     
 }

@@ -1,6 +1,8 @@
+using StarWar.Controllers.Dtos;
+
 namespace StarWar.Controllers.Service;
 
-public interface IStarWarCharaterDataFetcher
+public interface IStarWarCharacterDataFetcher
 {
-    
+    StarWarCharacterDataResponse  GetCharacterData(StarWarCharacterDataRequest request);
 }

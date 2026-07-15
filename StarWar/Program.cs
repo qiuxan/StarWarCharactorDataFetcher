@@ -1,4 +1,5 @@
 using StarWar.Controllers.Service;
+using StarWar.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

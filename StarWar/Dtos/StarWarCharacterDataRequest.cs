@@ -1,4 +1,4 @@
-namespace StarWar.Controllers.Dtos;
+namespace StarWar.Dtos;
 
 public record StarWarCharacterDataRequest
 {

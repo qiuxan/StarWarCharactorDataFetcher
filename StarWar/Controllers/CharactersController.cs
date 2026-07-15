@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using StarWar.Controllers.Dtos;
-using StarWar.Controllers.Service;
+using StarWar.Dtos;
+using StarWar.Service;
 
 namespace StarWar.Controllers;
 
@@ -15,17 +15,17 @@ public class CharactersController : Controller
     }
 
     [HttpGet(Name = "GetCharacters")]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
         string url = "https://swapi.py4e.com/api/people?format=json";
         
-        var response = _dataFetcher.GetCharacterData(new StarWarCharacterDataRequest { Url = url } );
+        var response = await _dataFetcher.GetCharacterDataAsync(new StarWarCharacterDataRequest { Url = url } );
 
         var averageHeight = response.AverageHeight;
         var averageWeight = response.AverageWeight;
         
-        var percentile95Height = averageHeight * 0.95;
-        var percentile95Weight = averageWeight * 0.95;
+        var percentile95Height = response.Percentile95Height;
+        var percentile95Weight = response.Percentile95Weight;
 
 
         return Ok($"Average Height: {averageHeight}" + " cm \n"+
